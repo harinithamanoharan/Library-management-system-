@@ -1,0 +1,127 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Book {
+    String title;
+    String author;
+    boolean isAvailable;
+
+    Book(String title, String author) {
+        this.title = title;
+        this.author = author;
+        this.isAvailable = true;
+    }
+
+    void borrowBook() {
+        if (isAvailable) {
+            isAvailable = false;
+            System.out.println("Book borrowed successfully.");
+        } else {
+            System.out.println("Book is already borrowed.");
+        }
+    }
+
+    void returnBook() {
+        isAvailable = true;
+        System.out.println("Book returned successfully.");
+    }
+
+    void displayInfo() {
+        System.out.println("Title: " + title + ", Author: " + author + ", Available: " + isAvailable);
+    }
+}
+
+class Library {
+    ArrayList<Book> books = new ArrayList<>();
+
+    void addBook(String title, String author) {
+        books.add(new Book(title, author));
+        System.out.println("Book added successfully.");
+    }
+
+    void displayBooks() {
+        if (books.isEmpty()) {
+            System.out.println("No books available.");
+        } else {
+            for (Book b : books) {
+                b.displayInfo();
+            }
+        }
+    }
+
+    void borrowBook(String title) {
+        for (Book b : books) {
+            if (b.title.equalsIgnoreCase(title)) {
+                b.borrowBook();
+                return;
+            }
+        }
+        System.out.println("Book not found.");
+    }
+
+    void returnBook(String title) {
+        for (Book b : books) {
+            if (b.title.equalsIgnoreCase(title)) {
+                b.returnBook();
+                return;
+            }
+        }
+        System.out.println("Book not found.");
+    }
+}
+
+public class LibrarySystem {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        Library library = new Library();
+        int choice;
+
+        do {
+            System.out.println("\nLibrary Management System");
+            System.out.println("1. Add Book");
+            System.out.println("2. View Books");
+            System.out.println("3. Borrow Book");
+            System.out.println("4. Return Book");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+            sc.nextLine(); // Consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter title: ");
+                    String title = sc.nextLine();
+                    System.out.print("Enter author: ");
+                    String author = sc.nextLine();
+                    library.addBook(title, author);
+                    break;
+
+                case 2:
+                    library.displayBooks();
+                    break;
+
+                case 3:
+                    System.out.print("Enter title of the book to borrow: ");
+                    String borrowTitle = sc.nextLine();
+                    library.borrowBook(borrowTitle);
+                    break;
+
+                case 4:
+                    System.out.print("Enter title of the book to return: ");
+                    String returnTitle = sc.nextLine();
+                    library.returnBook(returnTitle);
+                    break;
+
+                case 5:
+                    System.out.println("Exiting system. Goodbye!");
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Try again.");
+            }
+
+        } while (choice != 5);
+
+        sc.close();
+    }
+}
